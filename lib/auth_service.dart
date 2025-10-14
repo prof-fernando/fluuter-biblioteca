@@ -10,4 +10,20 @@ class AuthService {
     );
     return resultado.user;
   }
+
+  Future<User?> registro(String nome, String email, String senha) async {
+    try {
+      UserCredential resultado = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: senha,
+      );
+      if (resultado.user != null) {
+        resultado.user!.updateDisplayName(nome);
+      }
+
+      return resultado.user;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
