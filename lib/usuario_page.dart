@@ -22,7 +22,7 @@ class _LoginPageState extends State<UsuarioPage> {
         title: Text('Nova conta '),
       ),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
@@ -69,9 +69,10 @@ class _LoginPageState extends State<UsuarioPage> {
     } on FirebaseException catch (e) {
       var message = 'E-mail invalido';
       if (e.code == 'firebase_auth/weak-password') {
-          message = 'A senha precisa ter pelo menos 6 caracteres';
-      } 
-      const snack = SnackBar(content:  Text(''));
+        message = 'A senha precisa ter pelo menos 6 caracteres';
+      }
+      const snack = SnackBar(content: Text(''));
       ScaffoldMessenger.of(ctx).showSnackBar(snack);
+    }
   }
 }
