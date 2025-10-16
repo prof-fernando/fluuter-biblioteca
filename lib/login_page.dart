@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_biblioteca/auth_service.dart';
+import 'package:flutter_biblioteca/home_page.dart';
 import 'package:flutter_biblioteca/usuario_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +17,14 @@ class _LoginPageState extends State<LoginPage> {
   final _txtPass = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _txtLogin.text = 'prof@iffar.edu.br';
+    _txtPass.text = '123456';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -22,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextField(
               decoration: InputDecoration(
-                label: Text('Senha:'),
+                label: Text('Email:'),
               ),
               controller: _txtLogin,
             ),
@@ -35,10 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                final usuario = auth.login(
-                  _txtLogin.text,
-                  _txtPass.text,
-                );
+                autenticar(context);
               },
               child: Text('Login'),
             ),
@@ -57,5 +64,26 @@ class _LoginPageState extends State<LoginPage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void autenticar(BuildContext context) async {
+    try {
+      final usuario = await auth.login(
+        _txtLogin.text,
+        _txtPass.text,
+      );
+      if (usuario != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomePage(),
+          ),
+        );
+      }
+    } on FirebaseException catch (e) {
+      const snack = SnackBar(content: Text('Usuário ou senha inválidos'));
+      ScaffoldMessenger.of(context).showSnackBar(snack);
+      print(e.code);
+    }
   }
 }

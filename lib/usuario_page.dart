@@ -59,19 +59,25 @@ class _LoginPageState extends State<UsuarioPage> {
     );
   }
 
-  cadastrar(BuildContext ctx) {
+  cadastrar(BuildContext ctx) async {
     try {
-      final usuario = _auth.registro(
+      final usuario = await _auth.registro(
         _txtNome.text,
         _txtEmail.text,
         _txtSenha.text,
       );
+      final snack = SnackBar(content: Text('Cadastro realizado com Sucesso!'));
+      ScaffoldMessenger.of(ctx).showSnackBar(snack);
+      Navigator.pop(ctx);
     } on FirebaseException catch (e) {
       var message = 'E-mail invalido';
-      if (e.code == 'firebase_auth/weak-password') {
+      if (e.code == 'weak-password') {
         message = 'A senha precisa ter pelo menos 6 caracteres';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'O e-mail já está em uso por outro usuário';
       }
-      const snack = SnackBar(content: Text(''));
+      print(e.code);
+      final snack = SnackBar(content: Text(message));
       ScaffoldMessenger.of(ctx).showSnackBar(snack);
     }
   }
