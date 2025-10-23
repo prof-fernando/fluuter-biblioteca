@@ -20,9 +20,9 @@ class Livro {
   factory Livro.fromMap(String id, Map<String, dynamic> dados) {
     return Livro(
       id: id,
-      titulo: dados['titulo'],
-      autor: dados['autor'],
-      ano: dados['ano'],
+      titulo: dados['titulo'] ?? '',
+      autor: dados['autor'] ?? '',
+      ano: dados['ano'] ?? 0,
     );
   }
 }

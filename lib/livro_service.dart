@@ -5,12 +5,13 @@ class LivroService {
   final CollectionReference _livroColletion = FirebaseFirestore.instance
       .collection('livros');
 
-  Future<void> gravar(Livro livro) async {
+  Future<Livro> gravar(Livro livro) async {
     if (livro.id.isEmpty) {
       await _livroColletion.add(livro.toMap());
     } else {
-      _livroColletion.doc(livro.id).update(livro.toMap());
+      await _livroColletion.doc(livro.id).update(livro.toMap());
     }
+    return livro;
   }
 
   Future<void> apagar(String id) async {

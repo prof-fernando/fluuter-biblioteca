@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_biblioteca/auth_service.dart';
 import 'package:flutter_biblioteca/livro.dart';
+import 'package:flutter_biblioteca/livro_page.dart';
 import 'package:flutter_biblioteca/livro_service.dart';
 import 'package:flutter_biblioteca/login_page.dart';
 
@@ -44,11 +45,33 @@ class HomePage extends StatelessWidget {
             itemCount: livros.length,
             itemBuilder: (contexto, index) {
               final livro = livros[index];
-              print('livro');
-              print(livros);
+
               return ListTile(
                 title: Text(livro.titulo),
                 subtitle: Text(livro.autor),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(
+                          MaterialPageRoute(
+                            builder: (_) => LivroPage(livro: livro),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        _livroService.apagar(livro.id);
+                      },
+                      icon: Icon(Icons.clear),
+                    ),
+                  ],
+                ),
               );
             },
           );
@@ -56,8 +79,12 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _livroService.gravar(
-            Livro(titulo: 'abc', autor: 'machado', ano: 201),
+          Navigator.of(
+            context,
+          ).push(
+            MaterialPageRoute(
+              builder: (_) => LivroPage(),
+            ),
           );
         },
         child: Text('+'),
